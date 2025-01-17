@@ -11,6 +11,8 @@
 
 # Class -------------------------------------------------------------------
 
+# TODO: var_y is multiple variables?
+
 
 #' REGObject: class representing a list of regression model
 #'

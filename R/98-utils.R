@@ -1,3 +1,6 @@
+`%||%` = function(a, b) if (!is.null(a)) a else b
+
+
 notnull_or_na <- function(x) {
   if (is.null(x)) NA_character_ else x
 }
