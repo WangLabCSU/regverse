@@ -11,18 +11,20 @@
 #' @return a `REGObject` R6 object.
 #' @export
 #' @examples
-#' x <- REGObject(
+#' x <- prepare(
 #'   data = mtcars,
 #'   vars_y = "mpg",
 #'   vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
 #'   vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
 #' )
+#' x = x |> run()
 #' x
-#' x |> run(f = "gaussian")
+#' @testexamples
+#' is(x, "REGObject")
 run <- function(
     obj,
     f = c(
-      "coxph", "binomial", "gaussian",
+      "gaussian", "coxph", "binomial",
       "Gamma", "inverse.gaussian",
       "poisson", "quasi", "quasibinomial",
       "quasipoisson"

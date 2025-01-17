@@ -60,23 +60,7 @@ setClass(
 
 
 # New ---------------------------------------------------------------------
-#' Create a `REGObject`
-#' @param data A `data.table` storing input data.
-#' @param vars_x Focal variables.
-#' @param vars_y Predicted variables or formulas.
-#' @param vars_c Covariables.
-#' @rdname REGObject
-#' @export
-#' @examples
-#' x <- REGObject(
-#'   data = mtcars,
-#'   vars_y = "mpg",
-#'   vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
-#'   vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
-#' )
-#' x
-#' @testexamples
-#' is(x, "REGObject")
+
 REGObject <- function(
     data, vars_y, vars_x, vars_c) {
   stopifnot(is.data.frame(data))
@@ -147,6 +131,9 @@ setMethod(
     cat(glue("\t variable y: {y}", y = paste(object@vars_y, collapse = ",")), "\n")
     cat(glue("\t variable x: {x}", x = paste(object@vars_x, collapse = ",")), "\n")
     cat(glue("\tcovariables: {c}", c = paste(object@vars_c, collapse = ",")), "\n")
+
+    cat("\nmodel built options:\n")
+    print(object@args)
 
     cat("\nmodel data head:\n")
     print(head(object@mdata))

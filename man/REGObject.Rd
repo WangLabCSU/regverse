@@ -3,20 +3,7 @@
 \docType{class}
 \name{REGObject-class}
 \alias{REGObject-class}
-\alias{REGObject}
 \title{REGObject: class representing a list of regression model}
-\usage{
-REGObject(data, vars_y, vars_x, vars_c)
-}
-\arguments{
-\item{data}{A `data.table` storing input data.}
-
-\item{vars_y}{Predicted variables or formulas.}
-
-\item{vars_x}{Focal variables.}
-
-\item{vars_c}{Covariables.}
-}
 \description{
 Contains fields storing data and methods to build, process and visualize
 a list of regression model.
@@ -25,9 +12,9 @@ Currently, this class is designed for CoxPH and GLM regression models.
 \section{Slots}{
 
 \describe{
-\item{\code{data}}{A `data.table` storing input data.}
+\item{\code{data}}{A \code{data.table} storing input data.}
 
-\item{\code{mdata}}{A `data.table` storing cleaned data for modeling.}
+\item{\code{mdata}}{A \code{data.table} storing cleaned data for modeling.}
 
 \item{\code{vars_x}}{Focal variables.}
 
@@ -39,18 +26,9 @@ Currently, this class is designed for CoxPH and GLM regression models.
 
 \item{\code{models}}{Models built.}
 
-\item{\code{results}}{Model results, a object of `parameters_model`. Can be converted into
-data.frame with [as.data.frame()] or [data.table::as.data.table()].}
+\item{\code{results}}{Model results, a object of \code{parameters_model}. Can be converted into
+data.frame with \code{\link[=as.data.frame]{as.data.frame()}} or \code{\link[data.table:as.data.table]{data.table::as.data.table()}}.}
 
 \item{\code{.forest_data}}{More detailed data used for plotting forest.}
 }}
 
-\examples{
-x <- REGObject(
-  data = mtcars,
-  vars_y = "mpg",
-  vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
-  vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
-)
-x
-}

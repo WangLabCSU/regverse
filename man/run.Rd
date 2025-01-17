@@ -6,7 +6,7 @@
 \usage{
 run(
   obj,
-  f = c("coxph", "binomial", "gaussian", "Gamma", "inverse.gaussian", "poisson", "quasi",
+  f = c("gaussian", "coxph", "binomial", "Gamma", "inverse.gaussian", "poisson", "quasi",
     "quasibinomial", "quasipoisson"),
   exp = NULL,
   ci = 0.95,
@@ -15,34 +15,34 @@ run(
 )
 }
 \arguments{
-\item{obj}{a `REGObject` R6 object.}
+\item{obj}{a \code{REGObject} R6 object.}
 
-\item{f}{a length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
-Other options are members of GLM family, see [stats::family()].
+\item{f}{a length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
+Other options are members of GLM family, see \code{\link[stats:family]{stats::family()}}.
 'binomial' is logistic, and 'gaussian' is linear.}
 
 \item{exp}{logical, indicating whether or not to exponentiate the the coefficients.}
 
-\item{ci}{confidence Interval (CI) level. Default to 0.95 (95%).
-e.g. [survival::coxph()].}
+\item{ci}{confidence Interval (CI) level. Default to 0.95 (95\%).
+e.g. \code{\link[survival:coxph]{survival::coxph()}}.}
 
-\item{parallel}{if `TRUE`, use N-1 cores to run the task.}
+\item{parallel}{if \code{TRUE}, use N-1 cores to run the task.}
 
 \item{...}{other parameters passing to corresponding regression model function.}
 }
 \value{
-a `REGObject` R6 object.
+a \code{REGObject} R6 object.
 }
 \description{
 Run Regression Model Building
 }
 \examples{
-x <- REGObject(
+x <- prepare(
   data = mtcars,
   vars_y = "mpg",
   vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
   vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
 )
+x = x |> run()
 x
-x |> run(f = "gaussian")
 }
