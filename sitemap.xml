@@ -1,12 +1,12 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://wanglabcsu.github.io/regverse/404.html</loc></url>
-<url><loc>https://wanglabcsu.github.io/regverse/LICENSE-text.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/regverse/LICENSE.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/regverse/authors.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/regverse/index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/regverse/news/index.html</loc></url>
-<url><loc>https://wanglabcsu.github.io/regverse/reference/REGObject-class.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/regverse/reference/REGObject.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/regverse/reference/index.html</loc></url>
 <url><loc>https://wanglabcsu.github.io/regverse/reference/regverse-package.html</loc></url>
+<url><loc>https://wanglabcsu.github.io/regverse/reference/run.html</loc></url>
 </urlset>
 
