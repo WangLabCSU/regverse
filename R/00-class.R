@@ -11,8 +11,8 @@
 
 # Class -------------------------------------------------------------------
 
-# TODO: var_y is multiple variables?
-
+# TODO: vars_y is multiple variables?
+# TODO: mdata 的必要性？也涉及 mdata 生成时的列选择
 
 #' REGObject: class representing a list of regression model
 #'
@@ -23,13 +23,14 @@
 #' @slot data A `data.table` storing input data.
 #' @slot mdata A `data.table` storing cleaned data for modeling.
 #' @slot vars_x Focal variables.
-#' @slot var_y Predicted variables or formulas
+#' @slot vars_y Predicted variables or formulas.
 #' @slot vars_c Covariables.
 #' @slot args Other arguments used for building regression models.
 #' @slot models Models built.
 #' @slot results Model results, a object of `parameters_model`. Can be converted into
 #' data.frame with [as.data.frame()] or [data.table::as.data.table()].
 #' @slot .forest_data More detailed data used for plotting forest.
+#' @rdname REGObject
 #' @export
 setClass(
   Class = "REGObject",
@@ -37,7 +38,7 @@ setClass(
     data = "data.table",
     mdata = "data.table",
     vars_x = "character",
-    var_y = "character",
+    vars_y = "character",
     vars_c = "character",
     args = "list",
     models = "list",
@@ -48,7 +49,7 @@ setClass(
     data = data.table(),
     mdata = data.table(),
     vars_x = NA_character_,
-    var_y = NA_character_,
+    vars_y = NA_character_,
     vars_c = NA_character_,
     args = list(),
     models = list(),
@@ -59,10 +60,50 @@ setClass(
 
 
 # New ---------------------------------------------------------------------
-REGObject <- function(name, age = NA) {
-  age <- as.double(age)
+#' Create a `REGObject`
+#' @param data A `data.table` storing input data.
+#' @param vars_x Focal variables.
+#' @param vars_y Predicted variables or formulas.
+#' @param vars_c Covariables.
+#' @rdname REGObject
+#' @export
+#' @examples
+#' x <- REGObject(
+#'   data = mtcars,
+#'   vars_y = "mpg",
+#'   vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
+#'   vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
+#' )
+#' x
+#' @testexamples
+#' is(x, "REGObject")
+REGObject <- function(
+    data, vars_y, vars_x, vars_c) {
+  stopifnot(is.data.frame(data))
 
-  new("REGObject", name = name, age = age)
+  data <- as.data.table(data, keep.rownames = TRUE)
+
+  vars_x <- unique(vars_x)
+  vars_y <- unique(vars_y)
+  vars_c <- unique(vars_c)
+  all_vars <- merge_vars(vars_x, vars_y, vars_c)
+
+  if (!all(all_vars %in% colnames(data))) {
+    rlang::abort(glue("column(s) not available: {all_vars[!all_vars %in% colnames(data)]}"))
+  }
+  mdata <- data[, all_vars, with = FALSE]
+  # TODO 特殊列名的处理
+
+  its <- intersect(vars_y, vars_x)
+  if (length(its) > 0) {
+    rlang::warn(glue("common variable(s) {paste(its, collapse = ', ')} found in input `x` and `y`, remove from x"))
+    vars_x <- setdiff(vars_x, vars_y)
+  }
+
+  new("REGObject",
+    data = data, mdata = mdata,
+    vars_x = vars_x, vars_y = vars_y, vars_c = vars_c
+  )
 }
 
 # Validator ---------------------------------------------------------------
@@ -102,5 +143,12 @@ setMethod(
   signature = "REGObject",
   definition = function(object) {
     cat(paste("An object of class", class(object), "\n"))
+
+    cat(glue("\t variable y: {y}", y = paste(object@vars_y, collapse = ",")), "\n")
+    cat(glue("\t variable x: {x}", x = paste(object@vars_x, collapse = ",")), "\n")
+    cat(glue("\tcovariables: {c}", c = paste(object@vars_c, collapse = ",")), "\n")
+
+    cat("\nmodel data head:\n")
+    print(head(object@mdata))
   }
 )

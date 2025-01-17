@@ -12,5 +12,12 @@
 #' @importFrom data.table .NGRP
 #' @importFrom data.table .SD
 #' @importFrom data.table data.table
+#' @importFrom data.table as.data.table
+#' @importFrom rlang abort
+#' @import parameters
+#' @import methods
+#' @import utils
+
+#' @import survival
 ## usethis namespace: end
 NULL

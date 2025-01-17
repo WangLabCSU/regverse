@@ -4,19 +4,21 @@
 \name{regverse-package}
 \alias{regverse}
 \alias{regverse-package}
-\title{regverse: What the Package Does (One Line, Title Case)}
+\title{regverse: regverse: Streamlined Data Modeling and Visualization in Biomedical Regression Analysis}
 \description{
-What the package does (one paragraph).
+Provides a comprehensive suite of tools to enhance regression analysis and interpretation in the field of computational biology and clinical medicine.
 }
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/WangLabCSU/regverse}
   \item \url{https://wanglabcsu.github.io/regverse/}
+  \item Report bugs at \url{https://github.com/WangLabCSU/regverse/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Shixiang Wang \email{w_shixiang@163.com} (\href{https://orcid.org/0000-0001-9855-7357}{ORCID})
 
 }
 \keyword{internal}
