@@ -14,4 +14,4 @@
 #' x
 #' @testexamples
 #' is(x, "REGObject")
-prepare = REGObject
+prepare <- REGObject

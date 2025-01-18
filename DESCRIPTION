@@ -1,5 +1,5 @@
 Package: regverse
-Title: regverse: Streamlined Data Modeling and Visualization in Biomedical
+Title: Streamlined Data Modeling and Visualization in Biomedical
     Regression Analysis
 Version: 0.0.0.9000
 Authors@R: 
@@ -14,11 +14,11 @@ URL: https://github.com/WangLabCSU/regverse,
     https://wanglabcsu.github.io/regverse/
 BugReports: https://github.com/WangLabCSU/regverse/issues
 Imports: 
+    cli,
     data.table,
     glue,
     methods,
     parameters,
-    rlang,
     survival
 Suggests: 
     testthat (>= 3.0.0)

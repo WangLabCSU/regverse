@@ -4,7 +4,7 @@
 \name{regverse-package}
 \alias{regverse}
 \alias{regverse-package}
-\title{regverse: regverse: Streamlined Data Modeling and Visualization in Biomedical Regression Analysis}
+\title{regverse: Streamlined Data Modeling and Visualization in Biomedical Regression Analysis}
 \description{
 Provides a comprehensive suite of tools to enhance regression analysis and interpretation in the field of computational biology and clinical medicine.
 }

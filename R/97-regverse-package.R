@@ -1,3 +1,5 @@
+# https://cli.r-lib.org/reference/inline-markup.html
+
 #' @keywords internal
 "_PACKAGE"
 
@@ -13,7 +15,7 @@
 #' @importFrom data.table .SD
 #' @importFrom data.table data.table
 #' @importFrom data.table as.data.table
-#' @importFrom rlang abort
+#' @import cli
 #' @import parameters
 #' @import methods
 #' @import utils

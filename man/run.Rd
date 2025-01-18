@@ -43,6 +43,6 @@ x <- prepare(
   vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
   vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
 )
-x = x |> run()
+x <- x |> run()
 x
 }

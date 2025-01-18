@@ -73,14 +73,14 @@ REGObject <- function(
   all_vars <- merge_vars(vars_x, vars_y, vars_c)
 
   if (!all(all_vars %in% colnames(data))) {
-    rlang::abort(glue("column(s) not available: {all_vars[!all_vars %in% colnames(data)]}"))
+    cli::cli_abort("column(s) not available in {.field data}: {.val {all_vars[!all_vars %in% colnames(data)]}}")
   }
   mdata <- data[, all_vars, with = FALSE]
   # TODO 特殊列名的处理
 
   its <- intersect(vars_y, vars_x)
   if (length(its) > 0) {
-    rlang::warn(glue("common variable(s) {paste(its, collapse = ', ')} found in input `x` and `y`, remove from x"))
+    cli::cli_warn("common variable(s) {.val {its}} found in input {.field vars_x} and {.field vars_y}, remove from {.field vars_x}")
     vars_x <- setdiff(vars_x, vars_y)
   }
 

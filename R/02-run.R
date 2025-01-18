@@ -17,7 +17,7 @@
 #'   vars_x = c("factor(cyl)", colnames(mtcars)[3:5]),
 #'   vars_c = c(colnames(mtcars)[8:9], "factor(gear)")
 #' )
-#' x = x |> run()
+#' x <- x |> run()
 #' x
 #' @testexamples
 #' is(x, "REGObject")
@@ -51,7 +51,7 @@ run <- function(
         # recipe to formula
         recipe <- if (f == "coxph") {
           if (length(y) < 2) {
-            rlang::abort("<2 y variables for coxph model, 'time' and 'status' are required")
+            cli::cli_abort("length<2 variable {.var vars_y} for coxph model, {.field time} and {.field status} are required in order")
           }
           glue("survival::Surv({paste(y, collapse = ', ')}) ~ {paste(unique(x), collapse = ' + ')}")
         } else {
