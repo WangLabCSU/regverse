@@ -41,7 +41,7 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run</span><span class="op">(</span></span>
 <span>  <span class="va">obj</span>,</span>
-<span>  f <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"coxph"</span>, <span class="st">"binomial"</span>, <span class="st">"gaussian"</span>, <span class="st">"Gamma"</span>, <span class="st">"inverse.gaussian"</span>, <span class="st">"poisson"</span>, <span class="st">"quasi"</span>,</span>
+<span>  f <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gaussian"</span>, <span class="st">"coxph"</span>, <span class="st">"binomial"</span>, <span class="st">"Gamma"</span>, <span class="st">"inverse.gaussian"</span>, <span class="st">"poisson"</span>, <span class="st">"quasi"</span>,</span>
 <span>    <span class="st">"quasibinomial"</span>, <span class="st">"quasipoisson"</span><span class="op">)</span>,</span>
 <span>  exp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
@@ -55,12 +55,12 @@
 
 
 <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
-<dd><p>a `REGObject` R6 object.</p></dd>
+<dd><p>a <code>REGObject</code> R6 object.</p></dd>
 
 
 <dt id="arg-f">f<a class="anchor" aria-label="anchor" href="#arg-f"></a></dt>
-<dd><p>a length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
-Other options are members of GLM family, see [stats::family()].
+<dd><p>a length-1 string specifying modeling function or family of <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code>, default is 'coxph'.
+Other options are members of GLM family, see <code><a href="https://rdrr.io/r/stats/family.html" class="external-link">stats::family()</a></code>.
 'binomial' is logistic, and 'gaussian' is linear.</p></dd>
 
 
@@ -69,12 +69,12 @@ Other options are members of GLM family, see [stats::family()].
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p>confidence Interval (CI) level. Default to 0.95 (95<!-- %). -->
-e.g. [survival::coxph()].</p></dd>
+<dd><p>confidence Interval (CI) level. Default to 0.95 (95%).
+e.g. <code><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">survival::coxph()</a></code>.</p></dd>
 
 
 <dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>if `TRUE`, use N-1 cores to run the task.</p></dd>
+<dd><p>if <code>TRUE</code>, use N-1 cores to run the task.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -83,37 +83,37 @@ e.g. [survival::coxph()].</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a `REGObject` R6 object.</p>
+    <p>a <code>REGObject</code> R6 object.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="REGObject.html">REGObject</a></span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="prepare.html">prepare</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">mtcars</span>,</span></span>
 <span class="r-in"><span>  vars_y <span class="op">=</span> <span class="st">"mpg"</span>,</span></span>
 <span class="r-in"><span>  vars_x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"factor(cyl)"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  vars_c <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">[</span><span class="fl">8</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span>, <span class="st">"factor(gear)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">run</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class REGObject </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	 variable y: mpg </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	 variable x: factor(cyl),disp,hp,drat </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	covariables: vs,am,factor(gear) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> model data head:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      cyl  disp    hp  drat   mpg    vs    am  gear</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     6   160   110  3.90  21.0     0     1     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     6   160   110  3.90  21.0     0     1     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     4   108    93  3.85  22.8     1     1     4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     6   258   110  3.08  21.4     1     0     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     8   360   175  3.15  18.7     0     0     3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     6   225   105  2.76  18.1     1     0     3</span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">|&gt;</span> <span class="fu">run</span><span class="op">(</span>f <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> An object of class REGObject </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	 variable y: mpg </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	 variable x: factor(cyl),disp,hp,drat </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	covariables: vs,am,factor(gear) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> model built options:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $f</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "gaussian"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $exp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $parallel</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model data head:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      cyl  disp    hp  drat   mpg    vs    am  gear</span>
