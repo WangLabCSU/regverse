@@ -3,7 +3,7 @@
 #' @description
 #' Contains fields storing data and methods to build, process and visualize
 #' a regression model.
-#' Currently, this class is designed for CoxPH and GLM regression models.
+#' Currently, this class is designed for CoxPH (`survival::coxph()`) and GLM (`stats::glm()`) regression models.
 #'
 #' @export
 #' @examples
@@ -80,15 +80,16 @@ REGModel <- R6::R6Class(
   "REGModel",
   inherit = NULL,
   public = list(
-    #' @field data a `data.table` storing modeling data.
-    #' @field recipe an R `formula` storing model formula.
-    #' @field terms all terms (covariables, i.e. columns) used for building model.
-    #' @field args other arguments used for building model.
-    #' @field model a constructed model.
-    #' @field type model type (class).
-    #' @field result model result, a object of `parameters_model`. Can be converted into
+    #' @field data A `data.table` storing modeling data.
+    #' @field recipe An R `formula` storing model formula.
+    #' @field terms Variables for modeling.
+    #' @field args Other arguments used for building model.
+    #' @field model A constructed model.
+    #' @field type Model type (class).
+    #' @field result Model result, a object of `parameters_model`.
+    #' Can be converted into
     #' data.frame with [as.data.frame()] or [data.table::as.data.table()].
-    #' @field forest_data more detailed data used for plotting forest.
+    #' @field forest_data More detailed data used for plotting forest.
     data = NULL,
     recipe = NULL,
     terms = NULL,
@@ -98,18 +99,18 @@ REGModel <- R6::R6Class(
     result = NULL,
     forest_data = NULL,
     #' @description Build a `REGModel` object.
-    #' @param data a `data.table` storing modeling data.
-    #' @param recipe an R `formula` or a list with two elements 'x' and 'y',
-    #' where 'x' is for covariables and 'y' is for label. See example for detail
-    #' operation.
-    #' @param f a length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
+    #' @param data A `data.table` storing modeling data.
+    #' @param recipe An R `formula` or a list with two elements 'x' and 'y',
+    #' where 'x' is for independent variables and 'y' is for dependent variable.
+    #' See examples for detail operation.
+    #' @param f A length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
     #' Other options are members of GLM family, see [stats::family()].
-    #' 'binomial' is logistic, and 'gaussian' is linear.
+    #' 'binomial' is logistic regression, and 'gaussian' is linear regression.
     #' @param ... other parameters passing to corresponding regression model function.
-    #' @param exp logical, indicating whether or not to exponentiate the the coefficients.
-    #' @param ci confidence Interval (CI) level. Default to 0.95 (95%).
+    #' @param exp Logical, indicating whether or not to exponentiate the the coefficients.
+    #' @param ci Confidence Interval (CI) level. Default to 0.95 (95%).
     #' e.g. [survival::coxph()].
-    #' @return a `REGModel` R6 object.
+    #' @return A `REGModel` R6 object.
     initialize = function(data, recipe, ...,
                           f = c(
                             "coxph", "binomial", "gaussian",
@@ -156,13 +157,13 @@ REGModel <- R6::R6Class(
         } else {
           self$terms <- all.vars(recipe_list[[3]])
         }
-        # Strange, if input a formula from outsize, a environment is not attached
+        # Strange, if input a formula from outside, a environment is not attached
         recipe <- stats::formula(deparse(recipe))
       }
 
       data <- data.table::as.data.table(data)
       if (!all(all_vars %in% colnames(data))) {
-        rlang::abort(glue("Column not available: {all_vars[!all_vars %in% colnames(data)]}"))
+        rlang::abort(glue("Column(s) not available: {all_vars[!all_vars %in% colnames(data)]}"))
       }
       data <- data[, all_vars, with = FALSE]
 
@@ -191,9 +192,9 @@ REGModel <- R6::R6Class(
       )
       private$model_data <- broom.helpers::model_get_model_frame(self$model)
     },
-    #' @description get tidy data for plotting forest.
-    #' @param separate_factor separate factor/class as a blank row.
-    #' @param global_p if `TRUE`, return global p value.
+    #' @description Get tidy data for plotting forest.
+    #' @param separate_factor Separate factor/class as a blank row.
+    #' @param global_p If `TRUE`, return global p value.
     get_forest_data = function(separate_factor = FALSE, global_p = FALSE) {
       self$forest_data <- make_forest_terms(
         self$model,
@@ -201,11 +202,15 @@ REGModel <- R6::R6Class(
         private$model_data,
         separate_factor, global_p
       )
+
+      vars = sapply(self$forest_data$term_label, get_vars)
+      self$forest_data = self$forest_data[order(match(vars, self$terms), decreasing = FALSE)]
+
     },
-    #' @description plot forest.
-    #' @param ref_line reference line, default is `1` for HR.
-    #' @param xlim limits of x axis.
-    #' @param ... other plot options passing to [forestploter::forest()].
+    #' @description Plot forest.
+    #' @param ref_line Reference line, default is `1` for HR.
+    #' @param xlim Limits of x axis.
+    #' @param ... Other plot options passing to [forestploter::forest()].
     #' Also check <https://github.com/adayim/forestploter> to see more complex adjustment of the result plot.
     plot_forest = function(ref_line = NULL, xlim = NULL, ...) {
       data <- self$forest_data
@@ -215,8 +220,8 @@ REGModel <- R6::R6Class(
       }
       plot_forest(data, ref_line, xlim, ...)
     },
-    #' @description print the `REGModel$result` with default plot methods from **see** package.
-    #' @param ... other parameters passing to `plot()` in `see:::plot.see_parameters_model` function.
+    #' @description Print the `REGModel$result` with default plot methods from **see** package.
+    #' @param ... Other parameters passing to `plot()` in `see:::plot.see_parameters_model` function.
     plot = function(...) {
       plot(self$result, ...)
     },

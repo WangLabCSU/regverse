@@ -46,13 +46,13 @@ Prepare data:
 library(regverse)
 library(survival)
 
-lung = survival::lung
-lung$sex = factor(lung$sex)
+lung <- survival::lung
+lung$sex <- factor(lung$sex)
 ```
 Create a model:
 
 ```{r}
-model = REGModel$new(
+model <- REGModel$new(
   lung,
   recipe = list(
     x = c("age", "sex"),
@@ -66,7 +66,7 @@ model
 You can also create it with formula:
 
 ```{r}
-model = REGModel$new(
+model <- REGModel$new(
   lung,
   recipe = Surv(time, status) ~ age + sex
 )

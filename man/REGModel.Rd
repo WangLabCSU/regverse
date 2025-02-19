@@ -6,7 +6,7 @@
 \description{
 Contains fields storing data and methods to build, process and visualize
 a regression model.
-Currently, this class is designed for CoxPH and GLM regression models.
+Currently, this class is designed for CoxPH (\code{survival::coxph()}) and GLM (\code{stats::glm()}) regression models.
 }
 \examples{
 library(survival)
@@ -76,22 +76,23 @@ mm4$plot_forest()
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{data}}{a \code{data.table} storing modeling data.}
+\item{\code{data}}{A \code{data.table} storing modeling data.}
 
-\item{\code{recipe}}{an R \code{formula} storing model formula.}
+\item{\code{recipe}}{An R \code{formula} storing model formula.}
 
-\item{\code{terms}}{all terms (covariables, i.e. columns) used for building model.}
+\item{\code{terms}}{All terms (covariables, i.e. columns) used for building model.}
 
-\item{\code{args}}{other arguments used for building model.}
+\item{\code{args}}{Other arguments used for building model.}
 
-\item{\code{model}}{a constructed model.}
+\item{\code{model}}{A constructed model.}
 
-\item{\code{type}}{model type (class).}
+\item{\code{type}}{Model type (class).}
 
-\item{\code{result}}{model result, a object of \code{parameters_model}. Can be converted into
+\item{\code{result}}{Model result, a object of \code{parameters_model}.
+Can be converted into
 data.frame with \code{\link[=as.data.frame]{as.data.frame()}} or \code{\link[data.table:as.data.table]{data.table::as.data.table()}}.}
 
-\item{\code{forest_data}}{more detailed data used for plotting forest.}
+\item{\code{forest_data}}{More detailed data used for plotting forest.}
 }
 \if{html}{\out{</div>}}
 }
@@ -126,34 +127,34 @@ Build a \code{REGModel} object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{a \code{data.table} storing modeling data.}
+\item{\code{data}}{A \code{data.table} storing modeling data.}
 
-\item{\code{recipe}}{an R \code{formula} or a list with two elements 'x' and 'y',
-where 'x' is for covariables and 'y' is for label. See example for detail
-operation.}
+\item{\code{recipe}}{An R \code{formula} or a list with two elements 'x' and 'y',
+where 'x' is for independent variables and 'y' is for dependent variable.
+See examples for detail operation.}
 
 \item{\code{...}}{other parameters passing to corresponding regression model function.}
 
-\item{\code{f}}{a length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
+\item{\code{f}}{A length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
 Other options are members of GLM family, see \code{\link[stats:family]{stats::family()}}.
-'binomial' is logistic, and 'gaussian' is linear.}
+'binomial' is logistic regression, and 'gaussian' is linear regression.}
 
-\item{\code{exp}}{logical, indicating whether or not to exponentiate the the coefficients.}
+\item{\code{exp}}{Logical, indicating whether or not to exponentiate the the coefficients.}
 
-\item{\code{ci}}{confidence Interval (CI) level. Default to 0.95 (95\%).
+\item{\code{ci}}{Confidence Interval (CI) level. Default to 0.95 (95\%).
 e.g. \code{\link[survival:coxph]{survival::coxph()}}.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a \code{REGModel} R6 object.
+A \code{REGModel} R6 object.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-REGModel-get_forest_data"></a>}}
 \if{latex}{\out{\hypertarget{method-REGModel-get_forest_data}{}}}
 \subsection{Method \code{get_forest_data()}}{
-get tidy data for plotting forest.
+Get tidy data for plotting forest.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{REGModel$get_forest_data(separate_factor = FALSE, global_p = FALSE)}\if{html}{\out{</div>}}
 }
@@ -161,9 +162,9 @@ get tidy data for plotting forest.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{separate_factor}}{separate factor/class as a blank row.}
+\item{\code{separate_factor}}{Separate factor/class as a blank row.}
 
-\item{\code{global_p}}{if \code{TRUE}, return global p value.}
+\item{\code{global_p}}{If \code{TRUE}, return global p value.}
 }
 \if{html}{\out{</div>}}
 }
@@ -172,7 +173,7 @@ get tidy data for plotting forest.
 \if{html}{\out{<a id="method-REGModel-plot_forest"></a>}}
 \if{latex}{\out{\hypertarget{method-REGModel-plot_forest}{}}}
 \subsection{Method \code{plot_forest()}}{
-plot forest.
+Plot forest.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{REGModel$plot_forest(ref_line = NULL, xlim = NULL, ...)}\if{html}{\out{</div>}}
 }
@@ -180,11 +181,11 @@ plot forest.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ref_line}}{reference line, default is \code{1} for HR.}
+\item{\code{ref_line}}{Reference line, default is \code{1} for HR.}
 
-\item{\code{xlim}}{limits of x axis.}
+\item{\code{xlim}}{Limits of x axis.}
 
-\item{\code{...}}{other plot options passing to \code{\link[forestploter:forest]{forestploter::forest()}}.
+\item{\code{...}}{Other plot options passing to \code{\link[forestploter:forest]{forestploter::forest()}}.
 Also check \url{https://github.com/adayim/forestploter} to see more complex adjustment of the result plot.}
 }
 \if{html}{\out{</div>}}
@@ -194,7 +195,7 @@ Also check \url{https://github.com/adayim/forestploter} to see more complex adju
 \if{html}{\out{<a id="method-REGModel-plot"></a>}}
 \if{latex}{\out{\hypertarget{method-REGModel-plot}{}}}
 \subsection{Method \code{plot()}}{
-print the \code{REGModel$result} with default plot methods from \strong{see} package.
+Print the \code{REGModel$result} with default plot methods from \strong{see} package.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{REGModel$plot(...)}\if{html}{\out{</div>}}
 }
@@ -202,7 +203,7 @@ print the \code{REGModel$result} with default plot methods from \strong{see} pac
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{other parameters passing to \code{plot()} in \code{see:::plot.see_parameters_model} function.}
+\item{\code{...}}{Other parameters passing to \code{plot()} in \code{see:::plot.see_parameters_model} function.}
 }
 \if{html}{\out{</div>}}
 }
