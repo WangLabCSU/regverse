@@ -58,7 +58,7 @@
 </h2>
 <p>You can install the development version of regverse like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ShixiangWang/regverse"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"WangLabCSU/regverse"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="simple-case">Simple case<a class="anchor" aria-label="anchor" href="#simple-case"></a>
@@ -69,11 +69,11 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/WangLabCSU/regverse" class="external-link">regverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lung</span> <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/lung.html" class="external-link">lung</a></span></span>
-<span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">lung</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/lung.html" class="external-link">lung</a></span></span>
+<span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span></code></pre></div>
 <p>Create a model:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">=</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  <span class="va">lung</span>,</span>
 <span>  recipe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
@@ -89,12 +89,12 @@
 <span><span class="co">#&gt; age       |        1.02 | 9.38e-03 | [1.00, 1.04] |  1.85 | 0.065</span></span>
 <span><span class="co">#&gt; sex [2]   |        0.60 |     0.10 | [0.43, 0.83] | -3.06 | 0.002</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p values (two-tailed) computed using a</span></span>
-<span><span class="co">#&gt;   Wald z-distribution approximation.</span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed</span></span>
+<span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span>
 <span><span class="co">#&gt; [coxph] model ==========</span></span></code></pre></div>
 <p>You can also create it with formula:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">=</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  <span class="va">lung</span>,</span>
 <span>  recipe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span></span>
 <span><span class="op">)</span></span>
@@ -107,8 +107,8 @@
 <span><span class="co">#&gt; age       |        1.02 | 9.38e-03 | [1.00, 1.04] |  1.85 | 0.065</span></span>
 <span><span class="co">#&gt; sex [2]   |        0.60 |     0.10 | [0.43, 0.83] | -3.06 | 0.002</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p values (two-tailed) computed using a</span></span>
-<span><span class="co">#&gt;   Wald z-distribution approximation.</span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed</span></span>
+<span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span>
 <span><span class="co">#&gt; [coxph] model ==========</span></span></code></pre></div>
 <p>Take a look at the model result (package <code>see</code> is required):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -183,15 +183,17 @@
 </h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">covr</span><span class="fu">::</span><span class="fu">package_coverage</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; regverse Coverage: 90.59%</span></span>
-<span><span class="co">#&gt; R/utils.R: 75.00%</span></span>
-<span><span class="co">#&gt; R/REGModel.R: 89.19%</span></span>
-<span><span class="co">#&gt; R/REGModelList.R: 98.28%</span></span></code></pre></div>
+<span><span class="co">#&gt; regverse Coverage: 74.94%</span></span>
+<span><span class="co">#&gt; R/geom_segment_straight.R: 35.90%</span></span>
+<span><span class="co">#&gt; R/utils.R: 56.25%</span></span>
+<span><span class="co">#&gt; R/REGModelList.R: 59.85%</span></span>
+<span><span class="co">#&gt; R/REGModel.R: 87.76%</span></span>
+<span><span class="co">#&gt; R/polar.R: 100.00%</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="license">LICENSE<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p>(MIT) Copyright (c) 2022 Shixiang Wang</p>
+<p>(Apache License) Copyright (c) 2022 Shixiang Wang &amp; WangLabCSU team</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -228,12 +230,9 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=regverse" class="external-link"><img src="https://www.r-pkg.org/badges/version/regverse" alt="CRAN status"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></li>
 <li><a href="https://github.com/ShixiangWang/regverse/actions" class="external-link"><img src="https://github.com/ShixiangWang/regverse/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://cran.r-project.org/package=regverse" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/regverse?color=orange"></a></li>
 <li><a href="https://hits.seeyoufarm.com" class="external-link"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FShixiangWang%2Fregverse&amp;count_bg=%2379C83D&amp;title_bg=%23555555&amp;icon=&amp;icon_color=%23E7E7E7&amp;title=hits&amp;edge_flat=false" alt="Hits"></a></li>
-<li><a href="https://gitter.im/ShixiangWang/community?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge" class="external-link"><img src="https://badges.gitter.im/ShixiangWang/community.svg" alt="Gitter"></a></li>
 </ul>
 </div>
 
