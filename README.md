@@ -5,8 +5,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/ShixiangWang/regverse/workflows/R-CMD-check/badge.svg)](https://github.com/ShixiangWang/regverse/actions)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/regverse?color=orange)](https://cran.r-project.org/package=regverse)
+[![R-CMD-check](https://github.com/WangLabCSU/regverse/actions/workflows/R-check.yaml/badge.svg)](https://github.com/WangLabCSU/regverse/actions/workflows/R-check.yaml)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FShixiangWang%2Fregverse&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
 <!-- badges: end -->
@@ -167,14 +166,14 @@ ml$plot_forest(ref_line = 0, xlim = c(-15, 8))
 
 ``` r
 covr::package_coverage()
-#> regverse Coverage: 74.94%
+#> regverse Coverage: 76.13%
 #> R/geom_segment_straight.R: 35.90%
 #> R/utils.R: 56.25%
-#> R/REGModelList.R: 59.85%
-#> R/REGModel.R: 87.76%
+#> R/REGModelList.R: 67.42%
+#> R/REGModel.R: 87.06%
 #> R/polar.R: 100.00%
 ```
 
 ## LICENSE
 
-(Apache License) Copyright (c) 2022 Shixiang Wang & WangLabCSU team
+(Apache License) Copyright (c) 2025 Shixiang Wang & WangLabCSU team
