@@ -5,8 +5,7 @@
 \title{R6 class representing a list of regression model}
 \description{
 Contains fields storing data and methods to build, process and visualize
-a list of regression model.
-Currently, this class is designed for CoxPH and GLM regression models.
+a list of regression model (\link{REGModel}).
 }
 \examples{
 ml <- REGModelList$new(
@@ -31,24 +30,25 @@ ml$plot_forest()
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{data}}{a \code{data.table} storing modeling data.}
+\item{\code{data}}{A \code{data.table} storing modeling data.}
 
-\item{\code{x}}{focal variables (terms).}
+\item{\code{x}}{Focal variables (terms).}
 
-\item{\code{y}}{predicted variables or expression.}
+\item{\code{y}}{Predicted variables or expression.}
 
-\item{\code{covars}}{covariables.}
+\item{\code{covars}}{Covariables.}
 
-\item{\code{mlist}}{a list of \code{REGModel}.}
+\item{\code{mlist}}{A list of \code{REGModel}.}
 
-\item{\code{args}}{other arguments used for building model.}
+\item{\code{args}}{Other arguments used for building model.}
 
-\item{\code{type}}{model type (class).}
+\item{\code{type}}{Model type (class).}
 
-\item{\code{result}}{model result, a object of \code{parameters_model}. Can be converted into
+\item{\code{result}}{Model result, a object of \code{parameters_model}.
+Can be converted into
 data.frame with \code{\link[=as.data.frame]{as.data.frame()}} or \code{\link[data.table:as.data.table]{data.table::as.data.table()}}.}
 
-\item{\code{forest_data}}{more detailed data used for plotting forest.}
+\item{\code{forest_data}}{More detailed data used for plotting forest.}
 }
 \if{html}{\out{</div>}}
 }
@@ -74,18 +74,18 @@ Create a \code{REGModelList} object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{data}}{a \code{data.table} storing modeling data.}
+\item{\code{data}}{A \code{data.table} storing modeling data.}
 
-\item{\code{y}}{predicted variables or expression.}
+\item{\code{y}}{Predicted variables or expression.}
 
-\item{\code{x}}{focal variables (terms).}
+\item{\code{x}}{Focal variables (terms).}
 
-\item{\code{covars}}{covariables.}
+\item{\code{covars}}{Covariables.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a \code{REGModelList} R6 object.
+A \code{REGModelList} R6 object.
 }
 }
 \if{html}{\out{<hr>}}
@@ -107,30 +107,30 @@ Build \code{REGModelList} object.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{f}}{a length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
+\item{\code{f}}{A length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
 Other options are members of GLM family, see \code{\link[stats:family]{stats::family()}}.
 'binomial' is logistic, and 'gaussian' is linear.}
 
-\item{\code{exp}}{logical, indicating whether or not to exponentiate the the coefficients.}
+\item{\code{exp}}{Logical, indicating whether or not to exponentiate the the coefficients.}
 
-\item{\code{ci}}{confidence Interval (CI) level. Default to 0.95 (95\%).
+\item{\code{ci}}{Confidence Interval (CI) level. Default to 0.95 (95\%).
 e.g. \code{\link[survival:coxph]{survival::coxph()}}.}
 
-\item{\code{parallel}}{if \code{TRUE}, use N-1 cores to run the task.}
+\item{\code{parallel}}{If \code{TRUE}, use N-1 cores to run the task.}
 
-\item{\code{...}}{other parameters passing to corresponding regression model function.}
+\item{\code{...}}{Other parameters passing to corresponding regression model function.}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-a \code{REGModel} R6 object.
+A \code{REGModel} R6 object.
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-REGModelList-plot_forest"></a>}}
 \if{latex}{\out{\hypertarget{method-REGModelList-plot_forest}{}}}
 \subsection{Method \code{plot_forest()}}{
-plot forest.
+Plot forest.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{REGModelList$plot_forest(
   ref_line = NULL,
@@ -144,15 +144,15 @@ plot forest.
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{ref_line}}{reference line, default is \code{1} for HR.}
+\item{\code{ref_line}}{Reference line, default is \code{1} for HR.}
 
-\item{\code{xlim}}{limits of x axis.}
+\item{\code{xlim}}{Limits of x axis.}
 
-\item{\code{vars}}{selected variables to show.}
+\item{\code{vars}}{Selected variables to show.}
 
-\item{\code{p}}{selected variables with level' pvalue lower than p.}
+\item{\code{p}}{Selected variables with level' p value lower than p.}
 
-\item{\code{...}}{other plot options passing to \code{\link[forestploter:forest]{forestploter::forest()}}.
+\item{\code{...}}{Other plot options passing to \code{\link[forestploter:forest]{forestploter::forest()}}.
 Also check \url{https://github.com/adayim/forestploter} to see more complex adjustment of the result plot.}
 }
 \if{html}{\out{</div>}}

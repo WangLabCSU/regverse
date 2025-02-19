@@ -2,7 +2,7 @@
 
 # File R/REGModelList.R: @testexamples
 
-test_that("Function REGModelList() @ L30", {
+test_that("Function REGModelList() @ L29", {
   
   ml <- REGModelList$new(
     data = mtcars,

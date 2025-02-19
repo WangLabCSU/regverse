@@ -80,7 +80,7 @@ mm4$plot_forest()
 
 \item{\code{recipe}}{An R \code{formula} storing model formula.}
 
-\item{\code{terms}}{All terms (covariables, i.e. columns) used for building model.}
+\item{\code{terms}}{Variables for modeling.}
 
 \item{\code{args}}{Other arguments used for building model.}
 

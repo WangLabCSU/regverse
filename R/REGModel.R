@@ -203,9 +203,8 @@ REGModel <- R6::R6Class(
         separate_factor, global_p
       )
 
-      vars = sapply(self$forest_data$term_label, get_vars)
-      self$forest_data = self$forest_data[order(match(vars, self$terms), decreasing = FALSE)]
-
+      vars <- sapply(self$forest_data$term_label, get_vars)
+      self$forest_data <- self$forest_data[order(match(vars, self$terms), decreasing = FALSE)]
     },
     #' @description Plot forest.
     #' @param ref_line Reference line, default is `1` for HR.

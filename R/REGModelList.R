@@ -2,8 +2,7 @@
 #'
 #' @description
 #' Contains fields storing data and methods to build, process and visualize
-#' a list of regression model.
-#' Currently, this class is designed for CoxPH and GLM regression models.
+#' a list of regression model ([REGModel]).
 #'
 #' @export
 #' @examples
@@ -31,16 +30,17 @@ REGModelList <- R6::R6Class(
   "REGModelList",
   inherit = NULL,
   public = list(
-    #' @field data a `data.table` storing modeling data.
-    #' @field x focal variables (terms).
-    #' @field y predicted variables or expression.
-    #' @field covars covariables.
-    #' @field mlist a list of `REGModel`.
-    #' @field args other arguments used for building model.
-    #' @field type model type (class).
-    #' @field result model result, a object of `parameters_model`. Can be converted into
+    #' @field data A `data.table` storing modeling data.
+    #' @field x Focal variables (terms).
+    #' @field y Predicted variables or expression.
+    #' @field covars Covariables.
+    #' @field mlist A list of `REGModel`.
+    #' @field args Other arguments used for building model.
+    #' @field type Model type (class).
+    #' @field result Model result, a object of `parameters_model`.
+    #' Can be converted into
     #' data.frame with [as.data.frame()] or [data.table::as.data.table()].
-    #' @field forest_data more detailed data used for plotting forest.
+    #' @field forest_data More detailed data used for plotting forest.
     data = NULL,
     x = NULL,
     y = NULL,
@@ -51,11 +51,11 @@ REGModelList <- R6::R6Class(
     result = NULL,
     forest_data = NULL,
     #' @description Create a `REGModelList` object.
-    #' @param data a `data.table` storing modeling data.
-    #' @param x focal variables (terms).
-    #' @param y predicted variables or expression.
-    #' @param covars covariables.
-    #' @return a `REGModelList` R6 object.
+    #' @param data A `data.table` storing modeling data.
+    #' @param x Focal variables (terms).
+    #' @param y Predicted variables or expression.
+    #' @param covars Covariables.
+    #' @return A `REGModelList` R6 object.
     initialize = function(data, y, x, covars = NULL) {
       stopifnot(is.data.frame(data))
 
@@ -72,15 +72,15 @@ REGModelList <- R6::R6Class(
       self$covars <- covars
     },
     #' @description Build `REGModelList` object.
-    #' @param f a length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
+    #' @param f A length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
     #' Other options are members of GLM family, see [stats::family()].
     #' 'binomial' is logistic, and 'gaussian' is linear.
-    #' @param ... other parameters passing to corresponding regression model function.
-    #' @param exp logical, indicating whether or not to exponentiate the the coefficients.
-    #' @param ci confidence Interval (CI) level. Default to 0.95 (95%).
+    #' @param ... Other parameters passing to corresponding regression model function.
+    #' @param exp Logical, indicating whether or not to exponentiate the the coefficients.
+    #' @param ci Confidence Interval (CI) level. Default to 0.95 (95%).
     #' e.g. [survival::coxph()].
-    #' @param parallel if `TRUE`, use N-1 cores to run the task.
-    #' @return a `REGModel` R6 object.
+    #' @param parallel If `TRUE`, use N-1 cores to run the task.
+    #' @return A `REGModel` R6 object.
     build = function(f = c(
                        "coxph", "binomial", "gaussian",
                        "Gamma", "inverse.gaussian",
@@ -98,19 +98,6 @@ REGModelList <- R6::R6Class(
 
       self$args <- list(...)
       ml <- list()
-      # for (i in seq_along(self$x)) {
-      #   m <- REGModel$new(
-      #     self$data,
-      #     recipe = list(
-      #       x = unique(c(self$x[i], self$covars)),
-      #       y = self$y
-      #     ),
-      #     f = f, exp = exp, ci = ci, ...
-      #   )
-      #   m$get_forest_data()
-      #   ml[[i]] <- m
-      # }
-      #
       build_one <- function(i, ...) {
         m <- tryCatch(
           {
@@ -176,12 +163,12 @@ REGModelList <- R6::R6Class(
       # Only keep focal term
       self$forest_data <- self$forest_data[focal_term == term_label]
     },
-    #' @description plot forest.
-    #' @param ref_line reference line, default is `1` for HR.
-    #' @param xlim limits of x axis.
-    #' @param vars selected variables to show.
-    #' @param p selected variables with level' pvalue lower than p.
-    #' @param ... other plot options passing to [forestploter::forest()].
+    #' @description Plot forest.
+    #' @param ref_line Reference line, default is `1` for HR.
+    #' @param xlim Limits of x axis.
+    #' @param vars Selected variables to show.
+    #' @param p Selected variables with level' p value lower than p.
+    #' @param ... Other plot options passing to [forestploter::forest()].
     #' Also check <https://github.com/adayim/forestploter> to see more complex adjustment of the result plot.
     plot_forest = function(ref_line = NULL, xlim = NULL, vars = NULL, p = NULL, ...) {
       data <- self$forest_data
