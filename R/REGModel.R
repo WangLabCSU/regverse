@@ -268,7 +268,15 @@ plot_forest <- function(data, ref_line = 1, xlim = c(0, 2), ...) {
     }
   }
 
-  dt <- data[, c("variable", "level", "n")]
+  has_group <- !is.null(attr(data, "group"))
+  if (has_group) {
+    dt <- data[, c("focal_term", "variable", "level", "n")]
+    colnames(dt) <- c("Group", "Variable", "Level", "N")
+  } else {
+    dt <- data[, c("variable", "level", "n")]
+    colnames(dt) <- c("Variable", "Level", "N")
+  }
+
   # Add blank column for the forest plot to display CI.
   # Adjust the column width with space.
   dt$` ` <- paste(rep(" ", 20), collapse = " ")
@@ -298,7 +306,7 @@ plot_forest <- function(data, ref_line = 1, xlim = c(0, 2), ...) {
     est = data$estimate,
     lower = data$CI_low,
     upper = data$CI_high,
-    ci_column = 4,
+    ci_column = if (has_group) 5 else 4,
     ref_line = ref_line,
     xlim = xlim,
     ...

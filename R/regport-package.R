@@ -18,6 +18,7 @@
 #' @importFrom parameters model_parameters
 #' @importFrom survival coxph
 #' @importFrom broom.helpers model_get_model_frame
+#' @importFrom ggnewscale new_scale
 ## usethis namespace: end
 NULL
 

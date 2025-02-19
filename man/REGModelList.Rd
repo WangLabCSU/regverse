@@ -28,14 +28,26 @@ ml$result
 ml$forest_data
 ml$plot_forest()
 
+lung <- survival::lung
 # Cox-PH regression
 ml2 <- REGModelList$new(
-  data = survival::lung,
+  data = lung,
   y = c("time", "status"),
   x = c("age", "ph.ecog", "ph.karno"),
   covars = c("factor(sex)")
 )
 ml2$build()
+ml2$plot_forest()
+
+# Group Cox analysis
+lung$ph.ecog <- factor(lung$ph.ecog)
+ml3 <- REGModelList$new(
+  data = lung,
+  y = c("time", "status"),
+  x = c("ph.ecog"),
+  covars = "age", group = "sex"
+)
+ml3$build()
 
 }
 \section{Public fields}{
@@ -48,6 +60,8 @@ ml2$build()
 \item{\code{y}}{Predicted variables or expression.}
 
 \item{\code{covars}}{Covariables.}
+
+\item{\code{group}}{A split variable.}
 
 \item{\code{mlist}}{A list of \code{REGModel}.}
 
@@ -80,7 +94,7 @@ data.frame with \code{\link[=as.data.frame]{as.data.frame()}} or \code{\link[dat
 \subsection{Method \code{new()}}{
 Create a \code{REGModelList} object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{REGModelList$new(data, y, x, covars = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{REGModelList$new(data, y, x, covars = NULL, group = NULL)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -93,6 +107,8 @@ Create a \code{REGModelList} object.
 \item{\code{x}}{Focal variables (terms).}
 
 \item{\code{covars}}{Covariables.}
+
+\item{\code{group}}{A split variable.}
 }
 \if{html}{\out{</div>}}
 }

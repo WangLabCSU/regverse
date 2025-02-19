@@ -113,5 +113,5 @@ covr::package_coverage()
 
 ## LICENSE
 
-(Apache License) Copyright (c) 2022 Shixiang Wang & WangLabCSU team
+(Apache License) Copyright (c) 2025 Shixiang Wang & WangLabCSU team
 

@@ -49,7 +49,7 @@ test_that("Function polar_init() @ L68", {
   # Use two different color scales
   if (requireNamespace("ggnewscale")) {
     library(ggnewscale)
-    p6 = p3 +
+    p6 <- p3 +
       new_scale("color") +
       polar_connect(data2, x1, x2, color = color, alpha = 0.8, linetype = 2)
     p6 + scale_color_brewer()

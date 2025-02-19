@@ -6,7 +6,7 @@
 #'
 #' @importFrom ggplot2 .pt aes_string alpha coord_polar element_blank
 #' expand_limits geom_point geom_segment ggplot ggproto labs theme
-#' zeroGrob
+#' zeroGrob element_text
 #'
 #' @return a `ggplot` object.
 #' @export
@@ -57,7 +57,7 @@
 #' # Use two different color scales
 #' if (requireNamespace("ggnewscale")) {
 #'   library(ggnewscale)
-#'   p6 = p3 +
+#'   p6 <- p3 +
 #'     new_scale("color") +
 #'     polar_connect(data2, x1, x2, color = color, alpha = 0.8, linetype = 2)
 #'   p6 + scale_color_brewer()
@@ -135,12 +135,12 @@ polar_connect <- function(data, x1, x2, ...) {
   my_aes <- do.call("aes_string", aes_args)
 
   do.call("geom_segment_straight",
-          args = c(
-            list(
-              mapping = my_aes,
-              data = data
-            ),
-            dot_list
-          )
+    args = c(
+      list(
+        mapping = my_aes,
+        data = data
+      ),
+      dot_list
+    )
   )
 }

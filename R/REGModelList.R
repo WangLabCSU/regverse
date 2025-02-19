@@ -26,14 +26,26 @@
 #' ml$forest_data
 #' ml$plot_forest()
 #'
+#' lung <- survival::lung
 #' # Cox-PH regression
 #' ml2 <- REGModelList$new(
-#'   data = survival::lung,
+#'   data = lung,
 #'   y = c("time", "status"),
 #'   x = c("age", "ph.ecog", "ph.karno"),
 #'   covars = c("factor(sex)")
 #' )
 #' ml2$build()
+#' ml2$plot_forest()
+#'
+#' # Group Cox analysis
+#' lung$ph.ecog <- factor(lung$ph.ecog)
+#' ml3 <- REGModelList$new(
+#'   data = lung,
+#'   y = c("time", "status"),
+#'   x = c("ph.ecog"),
+#'   covars = "age", group = "sex"
+#' )
+#' ml3$build()
 #'
 #' @testexamples
 #' expect_s3_class(ml, "REGModelList")
@@ -45,6 +57,7 @@ REGModelList <- R6::R6Class(
     #' @field x Focal variables (terms).
     #' @field y Predicted variables or expression.
     #' @field covars Covariables.
+    #' @field group A split variable.
     #' @field mlist A list of `REGModel`.
     #' @field args Other arguments used for building model.
     #' @field type Model type (class).
@@ -56,6 +69,7 @@ REGModelList <- R6::R6Class(
     x = NULL,
     y = NULL,
     covars = NULL,
+    group = NULL,
     args = NULL,
     mlist = NULL,
     type = NULL,
@@ -66,21 +80,22 @@ REGModelList <- R6::R6Class(
     #' @param x Focal variables (terms).
     #' @param y Predicted variables or expression.
     #' @param covars Covariables.
+    #' @param group A split variable.
     #' @return A `REGModelList` R6 object.
-    initialize = function(data, y, x, covars = NULL) {
+    initialize = function(data, y, x, covars = NULL, group = NULL) {
       stopifnot(is.data.frame(data))
 
-      all_vars <- merge_vars(x, y, covars)
+      all_vars <- merge_vars(x, y, covars, group)
       data <- data.table::as.data.table(data)
       if (!all(all_vars %in% colnames(data))) {
         rlang::abort(glue("Column not available: {all_vars[!all_vars %in% colnames(data)]}"))
       }
       data <- data[, all_vars, with = FALSE]
-
       self$data <- data
       self$x <- setdiff(x, y)
       self$y <- y
       self$covars <- covars
+      self$group <- group
 
       invisible(self)
     },
@@ -109,54 +124,103 @@ REGModelList <- R6::R6Class(
         is.null(exp) || is.logical(exp)
       )
 
+      data <- self$data
+      x <- self$x
+      y <- self$y
+      covars <- self$covars
+      grp_var <- self$group
       self$args <- list(...)
       ml <- list()
-      build_one <- function(i, ...) {
-        m <- tryCatch(
-          {
-            m <- REGModel$new(
-              self$data,
-              recipe = list(
-                x = unique(c(self$x[i], self$covars)),
-                y = self$y
-              ),
-              f = f, exp = exp, ci = ci, ...
-            )
-            m$get_forest_data()
-            m
-          },
-          error = function(e) {
-            message("failed for ", self$x[i], " due to following error")
-            message(e$message)
-            NULL
-          }
-        )
-        m
-      }
 
-      if (.Platform$OS.type == "windows") {
-        message("parallel computation from parallel package is not supported in Windows, disable it.")
-        parallel <- FALSE
-      }
+      if (!is.null(grp_var)) {
+        cli::cli_inform("group model data by {.val {grp_var}}")
 
-      fcall <- if (parallel) parallel::mclapply else lapply
-      args <- if (!parallel) {
-        list(seq_along(self$x), FUN = build_one, ...)
+        if (length(data[[grp_var]]) == length(table(data[[grp_var]]))) {
+          rlang::abort("Cannot set group by a variable that cannot be groupped!")
+        }
+
+        # only support one focal term
+        build_one <- function(data, ...) {
+          m <- tryCatch(
+            {
+              m <- REGModel$new(
+                data,
+                recipe = list(
+                  x = unique(c(x, covars)),
+                  y = y
+                ),
+                f = f, exp = exp, ci = ci, ...
+              )
+              m$get_forest_data()
+              m
+            },
+            error = function(e) {
+              message("failed for ", x, " due to following error")
+              message(e$message)
+              NULL
+            }
+          )
+          m
+        }
+
+        ml <- data |>
+          dplyr::group_split(.data[[grp_var]]) |>
+          lapply(build_one, ...)
       } else {
-        list(seq_along(self$x),
-          FUN = build_one,
-          mc.cores = max(parallel::detectCores() - 1L, 1L),
-          ...
-        )
+        build_one <- function(i, ...) {
+          m <- tryCatch(
+            {
+              m <- REGModel$new(
+                data,
+                recipe = list(
+                  x = unique(c(x[i], covars)),
+                  y = y
+                ),
+                f = f, exp = exp, ci = ci, ...
+              )
+              m$get_forest_data()
+              m
+            },
+            error = function(e) {
+              message("failed for ", x[i], " due to following error")
+              message(e$message)
+              NULL
+            }
+          )
+          m
+        }
+
+        if (.Platform$OS.type == "windows") {
+          message("parallel computation from parallel package is not supported in Windows, disable it.")
+          parallel <- FALSE
+        }
+
+
+        fcall <- if (parallel) parallel::mclapply else lapply
+        args <- if (!parallel) {
+          list(seq_along(self$x), FUN = build_one, ...)
+        } else {
+          list(seq_along(self$x),
+            FUN = build_one,
+            mc.cores = max(parallel::detectCores() - 1L, 1L),
+            ...
+          )
+        }
+        ml <- do.call("fcall", args = args)
       }
-      ml <- do.call("fcall", args = args)
 
       ml_status <- sapply(ml, is.null)
       if (all(ml_status)) {
         message("no model built, return NULL")
         return(invisible(NULL))
       }
-      xs <- self$x[!ml_status]
+
+      if (!is.null(grp_var)) {
+        xs <- unique(data[[grp_var]])
+      } else {
+        xs <- x[!ml_status]
+      }
+
       self$mlist <- ml[!ml_status]
       ml <- ml[!ml_status]
       self$type <- ml[[1]]$type
@@ -170,11 +234,20 @@ REGModelList <- R6::R6Class(
       self$forest_data <- data.table::rbindlist(
         lapply(
           seq_along(ml),
-          function(x) cbind(focal_term = xs[x], ml[[x]]$forest_data)
+          function(x) {
+            d <- ml[[x]]$forest_data
+            if (is.null(grp_var)) {
+              cbind(focal_term = xs[x], d)
+            } else {
+              cbind(focal_term = c(paste0(grp_var, ":", xs[x]), rep(NA, nrow(d) - 1)), d)
+            }
+          }
         )
       )
-      # Only keep focal term
-      self$forest_data <- self$forest_data[focal_term == term_label]
+      # TODO: Only keep focal term? Use filter controls
+      if (is.null(grp_var)) {
+        self$forest_data <- self$forest_data[focal_term == term_label]
+      }
 
       invisible(self)
     },
@@ -197,6 +270,7 @@ REGModelList <- R6::R6Class(
         vars2 <- names(minps[minps < p])
         data <- data[data$focal_term %in% vars2]
       }
+      if (!is.null(self$group)) attr(data, "group") <- TRUE
       plot_forest(data, ref_line, xlim, ...)
     },
     #' @description Plot connected risk network

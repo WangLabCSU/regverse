@@ -2,7 +2,7 @@
 
 # File R/REGModelList.R: @testexamples
 
-test_that("Function REGModelList() @ L40", {
+test_that("Function REGModelList() @ L52", {
   
   # GLM regression
   ml <- REGModelList$new(
@@ -22,14 +22,26 @@ test_that("Function REGModelList() @ L40", {
   ml$forest_data
   ml$plot_forest()
   
+  lung <- survival::lung
   # Cox-PH regression
   ml2 <- REGModelList$new(
-    data = survival::lung,
+    data = lung,
     y = c("time", "status"),
     x = c("age", "ph.ecog", "ph.karno"),
     covars = c("factor(sex)")
   )
   ml2$build()
+  ml2$plot_forest()
+  
+  # Group Cox analysis
+  lung$ph.ecog <- factor(lung$ph.ecog)
+  ml3 <- REGModelList$new(
+    data = lung,
+    y = c("time", "status"),
+    x = c("ph.ecog"),
+    covars = "age", group = "sex"
+  )
+  ml3$build()
   
   expect_s3_class(ml, "REGModelList")
 })
