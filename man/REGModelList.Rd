@@ -8,6 +8,7 @@ Contains fields storing data and methods to build, process and visualize
 a list of regression model (\link{REGModel}).
 }
 \examples{
+# GLM regression
 ml <- REGModelList$new(
   data = mtcars,
   y = "mpg",
@@ -26,6 +27,16 @@ ml$print()
 ml$result
 ml$forest_data
 ml$plot_forest()
+
+# Cox-PH regression
+ml2 <- REGModelList$new(
+  data = survival::lung,
+  y = c("time", "status"),
+  x = c("age", "ph.ecog", "ph.karno"),
+  covars = c("factor(sex)")
+)
+ml2$build()
+
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
@@ -58,6 +69,7 @@ data.frame with \code{\link[=as.data.frame]{as.data.frame()}} or \code{\link[dat
 \item \href{#method-REGModelList-new}{\code{REGModelList$new()}}
 \item \href{#method-REGModelList-build}{\code{REGModelList$build()}}
 \item \href{#method-REGModelList-plot_forest}{\code{REGModelList$plot_forest()}}
+\item \href{#method-REGModelList-plot_connected_risk}{\code{REGModelList$plot_connected_risk()}}
 \item \href{#method-REGModelList-print}{\code{REGModelList$print()}}
 \item \href{#method-REGModelList-clone}{\code{REGModelList$clone()}}
 }
@@ -159,10 +171,22 @@ Also check \url{https://github.com/adayim/forestploter} to see more complex adju
 }
 }
 \if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-REGModelList-plot_connected_risk"></a>}}
+\if{latex}{\out{\hypertarget{method-REGModelList-plot_connected_risk}{}}}
+\subsection{Method \code{plot_connected_risk()}}{
+Plot connected risk network
+Append \code{scale_size()} operation (i.e.,\code{scale_size(range = c(0.1, 4))})
+to reset the range of line width
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{REGModelList$plot_connected_risk()}\if{html}{\out{</div>}}
+}
+
+}
+\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-REGModelList-print"></a>}}
 \if{latex}{\out{\hypertarget{method-REGModelList-print}{}}}
 \subsection{Method \code{print()}}{
-print the \code{REGModelList} object
+Print the \code{REGModelList} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{REGModelList$print(...)}\if{html}{\out{</div>}}
 }
@@ -170,7 +194,7 @@ print the \code{REGModelList} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{unused.}
+\item{\code{...}}{Unused.}
 }
 \if{html}{\out{</div>}}
 }

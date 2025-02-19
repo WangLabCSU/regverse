@@ -212,7 +212,7 @@ Print the \code{REGModel$result} with default plot methods from \strong{see} pac
 \if{html}{\out{<a id="method-REGModel-print"></a>}}
 \if{latex}{\out{\hypertarget{method-REGModel-print}{}}}
 \subsection{Method \code{print()}}{
-print the \code{REGModel} object
+Print the \code{REGModel} object
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{REGModel$print(...)}\if{html}{\out{</div>}}
 }
@@ -220,7 +220,7 @@ print the \code{REGModel} object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{...}}{unused.}
+\item{\code{...}}{Unused.}
 }
 \if{html}{\out{</div>}}
 }

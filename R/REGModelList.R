@@ -6,6 +6,7 @@
 #'
 #' @export
 #' @examples
+#' # GLM regression
 #' ml <- REGModelList$new(
 #'   data = mtcars,
 #'   y = "mpg",
@@ -24,8 +25,18 @@
 #' ml$result
 #' ml$forest_data
 #' ml$plot_forest()
+#'
+#' # Cox-PH regression
+#' ml2 <- REGModelList$new(
+#'   data = survival::lung,
+#'   y = c("time", "status"),
+#'   x = c("age", "ph.ecog", "ph.karno"),
+#'   covars = c("factor(sex)")
+#' )
+#' ml2$build()
+#'
 #' @testexamples
-#' expect_is(ml, "REGModelList")
+#' expect_s3_class(ml, "REGModelList")
 REGModelList <- R6::R6Class(
   "REGModelList",
   inherit = NULL,
@@ -70,6 +81,8 @@ REGModelList <- R6::R6Class(
       self$x <- setdiff(x, y)
       self$y <- y
       self$covars <- covars
+
+      invisible(self)
     },
     #' @description Build `REGModelList` object.
     #' @param f A length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
@@ -162,6 +175,8 @@ REGModelList <- R6::R6Class(
       )
       # Only keep focal term
       self$forest_data <- self$forest_data[focal_term == term_label]
+
+      invisible(self)
     },
     #' @description Plot forest.
     #' @param ref_line Reference line, default is `1` for HR.
@@ -184,8 +199,57 @@ REGModelList <- R6::R6Class(
       }
       plot_forest(data, ref_line, xlim, ...)
     },
-    #' @description print the `REGModelList` object
-    #' @param ... unused.
+    #' @description Plot connected risk network
+    #' Append `scale_size()` operation (i.e.,`scale_size(range = c(0.1, 4))`)
+    #' to reset the range of line width
+    plot_connected_risk = function() {
+      if (self$type != "coxph") {
+        rlang::abort("This function is designed for coxph model analysis")
+      }
+      rlang::inform("please note only continuous focal terms analyzed and visualized")
+
+      # 1. Obtain regression results
+      data_reg <- self$result |> dplyr::filter(focal_term == variable)
+      data_reg$role <- data.table::fcase(
+        data_reg$p > 0.05, "non-signf",
+        data_reg$estimate < 1, "protector",
+        data_reg$estimate > 1, "risker"
+      )
+      data_reg$`-log10(p)` <- -log10(data_reg$p)
+
+      # 2. Correlation analysis
+      vars_comb <- combn(self$x |> get_vars(), 2, simplify = FALSE)
+      data <- self$data
+      cor_value <- sapply(vars_comb, function(x) {
+        cor(data[[x[1]]], data[[x[2]]], use = "pairwise")
+      })
+
+      data_cor <- cbind(as.data.frame(t(sapply(vars_comb, function(x) x))), cor_value)
+      colnames(data_cor) <- c("var1", "var2", "correlation")
+      data_cor$size <- abs(data_cor$correlation)
+      data_cor$way <- ifelse(data_cor$correlation > 0, "positive", "negative")
+      data_cor
+
+      # 3. Visualization
+      p <- polar_init(data_reg,
+        x = focal_term,
+        aes(color = role, size = `-log10(p)`)
+      ) + ggplot2::scale_color_manual(values = c("grey", "blue", "red")) +
+        labs(size = "-log10(p)", color = "risk type") +
+        ggnewscale::new_scale("color") +
+        ggnewscale::new_scale("size") +
+        polar_connect(data_cor, x1 = var1, x2 = var2, size = size, color = way, alpha = 0.5) +
+        ggplot2::scale_color_manual(values = c("cyan", "orange")) +
+        labs(color = "correlation type", size = "correlation size") +
+        theme(
+          legend.position = "bottom",
+          legend.direction = "vertical",
+          legend.box = "horizontal"
+        )
+      p
+    },
+    #' @description Print the `REGModelList` object
+    #' @param ... Unused.
     print = function(...) {
       cat(glue("<{cli::col_br_magenta('REGModelList')}>    =========="), "\n\n")
       cat(glue("{cli::col_green('X')}(s): {paste(self$x, collapse = ', ')}"), "\n")

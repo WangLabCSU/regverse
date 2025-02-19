@@ -71,11 +71,11 @@
 #' mm4$get_forest_data()
 #' mm4$plot_forest()
 #' @testexamples
-#' expect_is(mm, "REGModel")
-#' expect_is(mm2, "REGModel")
+#' expect_s3_class(mm, "REGModel")
+#' expect_s3_class(mm2, "REGModel")
 #' expect_equal(data.frame(mm$result), data.frame(mm2$result))
-#' expect_is(mm3, "REGModel")
-#' expect_is(mm4, "REGModel")
+#' expect_s3_class(mm3, "REGModel")
+#' expect_s3_class(mm4, "REGModel")
 REGModel <- R6::R6Class(
   "REGModel",
   inherit = NULL,
@@ -191,6 +191,8 @@ REGModel <- R6::R6Class(
         exponentiate = exp, ci = ci
       )
       private$model_data <- broom.helpers::model_get_model_frame(self$model)
+
+      invisible(self)
     },
     #' @description Get tidy data for plotting forest.
     #' @param separate_factor Separate factor/class as a blank row.
@@ -224,8 +226,8 @@ REGModel <- R6::R6Class(
     plot = function(...) {
       plot(self$result, ...)
     },
-    #' @description print the `REGModel` object
-    #' @param ... unused.
+    #' @description Print the `REGModel` object
+    #' @param ... Unused.
     print = function(...) {
       cat(glue("<{cli::col_br_magenta('REGModel')}>    =========="), "\n\n")
       print(self$result)

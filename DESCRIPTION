@@ -18,6 +18,8 @@ Imports:
     data.table,
     dplyr,
     forestploter,
+    ggnewscale,
+    ggplot2,
     glue,
     parameters,
     R6,
