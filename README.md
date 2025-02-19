@@ -5,13 +5,9 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/regverse)](https://cran.r-project.org/package=regverse)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![R-CMD-check](https://github.com/ShixiangWang/regverse/workflows/R-CMD-check/badge.svg)](https://github.com/ShixiangWang/regverse/actions)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/regverse?color=orange)](https://cran.r-project.org/package=regverse)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FShixiangWang%2Fregverse&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-[![Gitter](https://badges.gitter.im/ShixiangWang/community.svg)](https://gitter.im/ShixiangWang/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 <!-- badges: end -->
 
@@ -24,7 +20,7 @@ and GLMs).
 You can install the development version of regverse like so:
 
 ``` r
-remotes::install_github("ShixiangWang/regverse")
+remotes::install_github("WangLabCSU/regverse")
 ```
 
 ## Simple case
@@ -38,14 +34,14 @@ Prepare data:
 library(regverse)
 library(survival)
 
-lung = survival::lung
-lung$sex = factor(lung$sex)
+lung <- survival::lung
+lung$sex <- factor(lung$sex)
 ```
 
 Create a model:
 
 ``` r
-model = REGModel$new(
+model <- REGModel$new(
   lung,
   recipe = list(
     x = c("age", "sex"),
@@ -61,15 +57,15 @@ model
 #> age       |        1.02 | 9.38e-03 | [1.00, 1.04] |  1.85 | 0.065
 #> sex [2]   |        0.60 |     0.10 | [0.43, 0.83] | -3.06 | 0.002
 #> 
-#> Uncertainty intervals (equal-tailed) and p values (two-tailed) computed using a
-#>   Wald z-distribution approximation.
+#> Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+#>   using a Wald z-distribution approximation.
 #> [coxph] model ==========
 ```
 
 You can also create it with formula:
 
 ``` r
-model = REGModel$new(
+model <- REGModel$new(
   lung,
   recipe = Surv(time, status) ~ age + sex
 )
@@ -82,8 +78,8 @@ model
 #> age       |        1.02 | 9.38e-03 | [1.00, 1.04] |  1.85 | 0.065
 #> sex [2]   |        0.60 |     0.10 | [0.43, 0.83] | -3.06 | 0.002
 #> 
-#> Uncertainty intervals (equal-tailed) and p values (two-tailed) computed using a
-#>   Wald z-distribution approximation.
+#> Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
+#>   using a Wald z-distribution approximation.
 #> [coxph] model ==========
 ```
 
@@ -171,12 +167,14 @@ ml$plot_forest(ref_line = 0, xlim = c(-15, 8))
 
 ``` r
 covr::package_coverage()
-#> regverse Coverage: 90.59%
-#> R/utils.R: 75.00%
-#> R/REGModel.R: 89.19%
-#> R/REGModelList.R: 98.28%
+#> regverse Coverage: 74.94%
+#> R/geom_segment_straight.R: 35.90%
+#> R/utils.R: 56.25%
+#> R/REGModelList.R: 59.85%
+#> R/REGModel.R: 87.76%
+#> R/polar.R: 100.00%
 ```
 
 ## LICENSE
 
-(MIT) Copyright (c) 2022 Shixiang Wang
+(Apache License) Copyright (c) 2022 Shixiang Wang & WangLabCSU team
