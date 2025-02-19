@@ -46,8 +46,154 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
-Provides a comprehensive suite of tools to enhance regression analysis and interpretation in the field of computational biology and clinical medicine.
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="regverse">regverse<a class="anchor" aria-label="anchor" href="#regverse"></a>
+</h1></div>
+<!-- badges: start -->
+
+<!-- badges: end -->
+<p>The goal of regverse is to provides R6 classes, methods and utilities to construct, analyze, summarize, and visualize regression models (CoxPH and GLMs).</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of regverse like so:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ShixiangWang/regverse"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="simple-case">Simple case<a class="anchor" aria-label="anchor" href="#simple-case"></a>
+</h2>
+<p>This is a basic example which shows you how to build and visualize a Cox model.</p>
+<p>Prepare data:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/WangLabCSU/regverse" class="external-link">regverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lung</span> <span class="op">=</span> <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/lung.html" class="external-link">lung</a></span></span>
+<span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span></code></pre></div>
+<p>Create a model:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">=</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  <span class="va">lung</span>,</span>
+<span>  recipe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"status"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model</span></span>
+<span><span class="co">#&gt; &lt;REGModel&gt;    ========== </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter | Coefficient |       SE |       95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; age       |        1.02 | 9.38e-03 | [1.00, 1.04] |  1.85 | 0.065</span></span>
+<span><span class="co">#&gt; sex [2]   |        0.60 |     0.10 | [0.43, 0.83] | -3.06 | 0.002</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p values (two-tailed) computed using a</span></span>
+<span><span class="co">#&gt;   Wald z-distribution approximation.</span></span>
+<span><span class="co">#&gt; [coxph] model ==========</span></span></code></pre></div>
+<p>You can also create it with formula:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">=</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  <span class="va">lung</span>,</span>
+<span>  recipe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model</span></span>
+<span><span class="co">#&gt; &lt;REGModel&gt;    ========== </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter | Coefficient |       SE |       95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; age       |        1.02 | 9.38e-03 | [1.00, 1.04] |  1.85 | 0.065</span></span>
+<span><span class="co">#&gt; sex [2]   |        0.60 |     0.10 | [0.43, 0.83] | -3.06 | 0.002</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Uncertainty intervals (equal-tailed) and p values (two-tailed) computed using a</span></span>
+<span><span class="co">#&gt;   Wald z-distribution approximation.</span></span>
+<span><span class="co">#&gt; [coxph] model ==========</span></span></code></pre></div>
+<p>Take a look at the model result (package <code>see</code> is required):</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="fu">plot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+<p>Visualize with more nice forest plot.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="fu">get_forest_data</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">model</span><span class="op">$</span><span class="fu">plot_forest</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="batch-processing-models">Batch processing models<a class="anchor" aria-label="anchor" href="#batch-processing-models"></a>
+</h2>
+<p>For building a list of regression model, unlike above, a lazy building approach is used, i.e., <code>$build()</code> must manually typed after creating <code>REGModelList</code> object. (This also means you can check or modify the setting before building if necessary)</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ml</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/REGModelList.html">REGModelList</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span>,</span>
+<span>  y <span class="op">=</span> <span class="st">"mpg"</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"factor(cyl)"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  covars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span><span class="op">[</span><span class="fl">8</span><span class="op">:</span><span class="fl">9</span><span class="op">]</span>, <span class="st">"factor(gear)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">ml</span></span>
+<span><span class="co">#&gt; &lt;REGModelList&gt;    ========== </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; X(s): factor(cyl), disp, hp, drat </span></span>
+<span><span class="co">#&gt; Y(s): mpg </span></span>
+<span><span class="co">#&gt; covars: vs, am, factor(gear) </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Not build yet, run $build() method </span></span>
+<span><span class="co">#&gt; [] model ==========</span></span>
+<span><span class="va">ml</span><span class="op">$</span><span class="fu">build</span><span class="op">(</span>f <span class="op">=</span> <span class="st">"gaussian"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ml</span><span class="op">$</span><span class="va">result</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Classes 'data.table' and 'data.frame':   25 obs. of  10 variables:</span></span>
+<span><span class="co">#&gt;  $ focal_term: chr  "factor(cyl)" "factor(cyl)" "factor(cyl)" "factor(cyl)" ...</span></span>
+<span><span class="co">#&gt;  $ variable  : chr  "(Intercept)" "factor(cyl)6" "factor(cyl)8" "vs" ...</span></span>
+<span><span class="co">#&gt;  $ estimate  : num  23.28 -5.34 -8.5 1.68 4.31 ...</span></span>
+<span><span class="co">#&gt;  $ SE        : num  3.1 1.89 3.05 2.35 2.16 ...</span></span>
+<span><span class="co">#&gt;  $ CI        : num  0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 0.95 ...</span></span>
+<span><span class="co">#&gt;  $ CI_low    : num  17.203 -9.04 -14.473 -2.931 0.084 ...</span></span>
+<span><span class="co">#&gt;  $ CI_high   : num  29.37 -1.64 -2.53 6.3 8.54 ...</span></span>
+<span><span class="co">#&gt;  $ t         : num  7.504 -2.829 -2.791 0.715 1.999 ...</span></span>
+<span><span class="co">#&gt;  $ df_error  : int  25 25 25 25 25 25 25 26 26 26 ...</span></span>
+<span><span class="co">#&gt;  $ p         : num  6.18e-14 4.67e-03 5.25e-03 4.75e-01 4.56e-02 ...</span></span>
+<span><span class="co">#&gt;  - attr(*, ".internal.selfref")=&lt;externalptr&gt;</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ml</span><span class="op">$</span><span class="va">forest_data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Classes 'data.table' and 'data.frame':   6 obs. of  17 variables:</span></span>
+<span><span class="co">#&gt;  $ focal_term: chr  "factor(cyl)" "factor(cyl)" "factor(cyl)" "disp" ...</span></span>
+<span><span class="co">#&gt;  $ variable  : chr  "factor(cyl)" NA NA "disp" ...</span></span>
+<span><span class="co">#&gt;  $ term      : chr  "factor(cyl)4" "factor(cyl)6" "factor(cyl)8" "disp" ...</span></span>
+<span><span class="co">#&gt;  $ term_label: chr  "factor(cyl)" "factor(cyl)" "factor(cyl)" "disp" ...</span></span>
+<span><span class="co">#&gt;  $ class     : chr  "factor" "factor" "factor" "numeric" ...</span></span>
+<span><span class="co">#&gt;  $ level     : chr  "4" "6" "8" NA ...</span></span>
+<span><span class="co">#&gt;  $ level_no  : int  1 2 3 NA NA NA</span></span>
+<span><span class="co">#&gt;  $ n         : int  11 7 14 32 32 32</span></span>
+<span><span class="co">#&gt;  $ estimate  : num  0 -5.3404 -8.5026 -0.0282 -0.0515 ...</span></span>
+<span><span class="co">#&gt;  $ SE        : num  NA 1.88767 3.04626 0.00924 0.01201 ...</span></span>
+<span><span class="co">#&gt;  $ CI        : num  NA 0.95 0.95 0.95 0.95 0.95</span></span>
+<span><span class="co">#&gt;  $ CI_low    : num  NA -9.0402 -14.4732 -0.0463 -0.075 ...</span></span>
+<span><span class="co">#&gt;  $ CI_high   : num  NA -1.6407 -2.532 -0.0101 -0.0279 ...</span></span>
+<span><span class="co">#&gt;  $ t         : num  NA -2.83 -2.79 -3.05 -4.28 ...</span></span>
+<span><span class="co">#&gt;  $ df_error  : int  NA 25 25 26 26 26</span></span>
+<span><span class="co">#&gt;  $ p         : num  NA 4.67e-03 5.25e-03 2.27e-03 1.84e-05 ...</span></span>
+<span><span class="co">#&gt;  $ reference : logi  TRUE FALSE FALSE FALSE FALSE FALSE</span></span>
+<span><span class="co">#&gt;  - attr(*, ".internal.selfref")=&lt;externalptr&gt;</span></span>
+<span></span>
+<span><span class="va">ml</span><span class="op">$</span><span class="fu">plot_forest</span><span class="op">(</span>ref_line <span class="op">=</span> <span class="fl">0</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">15</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="coverage">Coverage<a class="anchor" aria-label="anchor" href="#coverage"></a>
+</h2>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">covr</span><span class="fu">::</span><span class="fu">package_coverage</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; regverse Coverage: 90.59%</span></span>
+<span><span class="co">#&gt; R/utils.R: 75.00%</span></span>
+<span><span class="co">#&gt; R/REGModel.R: 89.19%</span></span>
+<span><span class="co">#&gt; R/REGModelList.R: 98.28%</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="license">LICENSE<a class="anchor" aria-label="anchor" href="#license"></a>
+</h2>
+<p>(MIT) Copyright (c) 2022 Shixiang Wang</p>
+</div>
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -79,7 +225,17 @@ Provides a comprehensive suite of tools to enhance regression analysis and inter
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=regverse" class="external-link"><img src="https://www.r-pkg.org/badges/version/regverse" alt="CRAN status"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="lifecycle"></a></li>
+<li><a href="https://github.com/ShixiangWang/regverse/actions" class="external-link"><img src="https://github.com/ShixiangWang/regverse/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://cran.r-project.org/package=regverse" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/regverse?color=orange"></a></li>
+<li><a href="https://hits.seeyoufarm.com" class="external-link"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FShixiangWang%2Fregverse&amp;count_bg=%2379C83D&amp;title_bg=%23555555&amp;icon=&amp;icon_color=%23E7E7E7&amp;title=hits&amp;edge_flat=false" alt="Hits"></a></li>
+<li><a href="https://gitter.im/ShixiangWang/community?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge" class="external-link"><img src="https://badges.gitter.im/ShixiangWang/community.svg" alt="Gitter"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
