@@ -2,7 +2,7 @@
 
 # File R/"01-prepare.R": @testexamples
 
-test_that("Function prepare() @ L17", {
+test_that("Function prepare() @ L20", {
   
   x <- prepare(
     data = mtcars,

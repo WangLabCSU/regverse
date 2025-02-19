@@ -58,38 +58,6 @@ setClass(
   )
 )
 
-
-# New ---------------------------------------------------------------------
-
-REGObject <- function(
-    data, vars_y, vars_x, vars_c) {
-  stopifnot(is.data.frame(data))
-
-  data <- as.data.table(data, keep.rownames = TRUE)
-
-  vars_x <- unique(vars_x)
-  vars_y <- unique(vars_y)
-  vars_c <- unique(vars_c)
-  all_vars <- merge_vars(vars_x, vars_y, vars_c)
-
-  if (!all(all_vars %in% colnames(data))) {
-    cli::cli_abort("column(s) not available in {.field data}: {.val {all_vars[!all_vars %in% colnames(data)]}}")
-  }
-  mdata <- data[, all_vars, with = FALSE]
-  # TODO 特殊列名的处理
-
-  its <- intersect(vars_y, vars_x)
-  if (length(its) > 0) {
-    cli::cli_warn("common variable(s) {.val {its}} found in input {.field vars_x} and {.field vars_y}, remove from {.field vars_x}")
-    vars_x <- setdiff(vars_x, vars_y)
-  }
-
-  new("REGObject",
-    data = data, mdata = mdata,
-    vars_x = vars_x, vars_y = vars_y, vars_c = vars_c
-  )
-}
-
 # Validator ---------------------------------------------------------------
 # explicitly check
 # validObject(alex)

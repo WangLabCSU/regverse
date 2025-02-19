@@ -1,16 +1,18 @@
-#' Run Regression Model Building
-#' @param obj a `REGObject` R6 object.
-#' @param f a length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
+#' Run regression model building
+#'
+#' @param obj A `REGObject` R6 object.
+#' @param f A length-1 string specifying modeling function or family of [glm()], default is 'coxph'.
 #' Other options are members of GLM family, see [stats::family()].
 #' 'binomial' is logistic, and 'gaussian' is linear.
-#' @param ... other parameters passing to corresponding regression model function.
-#' @param exp logical, indicating whether or not to exponentiate the the coefficients.
-#' @param ci confidence Interval (CI) level. Default to 0.95 (95%).
+#' @param ... Other parameters passing to corresponding regression model function.
+#' @param exp Logical, indicating whether or not to exponentiate the the coefficients.
+#' @param ci Confidence Interval (CI) level. Default to 0.95 (95%).
 #' e.g. [survival::coxph()].
-#' @param parallel if `TRUE`, use N-1 cores to run the task.
-#' @return a `REGObject` R6 object.
+#' @param parallel If `TRUE`, use N-1 cores to run the task.
+#' @return A `REGObject` R6 object.
 #' @export
 #' @examples
+#' # General generalized linear models (GLM) models
 #' x <- prepare(
 #'   data = mtcars,
 #'   vars_y = "mpg",
@@ -19,7 +21,15 @@
 #' )
 #' x <- x |> run()
 #' x
+#'
+#' # Cox models
+#' library(survival)
+#'
+#' x2 <- prepare(data = lung, vars_y = c("time", "status"), vars_x = c("age", "factor(ph.ecog)", "ph.karno"), vars_c = c("factor(sex)"))
+#' x2 <- x2 |> run(f = "coxph")
+#'
 #' @testexamples
+#' is(x, "REGObject")
 #' is(x, "REGObject")
 run <- function(
     obj,
@@ -29,13 +39,13 @@ run <- function(
       "poisson", "quasi", "quasibinomial",
       "quasipoisson"
     ),
-    exp = NULL, ci = 0.95,
+    exp = FALSE, ci = 0.95,
     parallel = FALSE,
     ...) {
   f <- f[1]
   stopifnot(
     is.character(f),
-    is.null(exp) || is.logical(exp)
+    is.logical(exp)
   )
 
   obj@args <- list(..., f = f, exp = exp, ci = ci, parallel = parallel)
@@ -117,7 +127,8 @@ run <- function(
       function(x) cbind(focal_term = xs[x], ml[[x]]$result)
     )
   )
-  colnames(obj@results)[2:3] <- c("variable", "estimate")
+  # colnames(obj@results)[2:3] <- c("variable", "estimate")
+  #
   # private$model_data <- broom.helpers::model_get_model_frame(self$model)
   # self$forest_data <- make_forest_terms(
   #   self$model,

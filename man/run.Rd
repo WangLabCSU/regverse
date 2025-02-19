@@ -2,7 +2,7 @@
 % Please edit documentation in R/02-run.R
 \name{run}
 \alias{run}
-\title{Run Regression Model Building}
+\title{Run regression model building}
 \usage{
 run(
   obj,
@@ -15,26 +15,26 @@ run(
 )
 }
 \arguments{
-\item{obj}{a \code{REGObject} R6 object.}
+\item{obj}{A \code{REGObject} R6 object.}
 
-\item{f}{a length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
+\item{f}{A length-1 string specifying modeling function or family of \code{\link[=glm]{glm()}}, default is 'coxph'.
 Other options are members of GLM family, see \code{\link[stats:family]{stats::family()}}.
 'binomial' is logistic, and 'gaussian' is linear.}
 
-\item{exp}{logical, indicating whether or not to exponentiate the the coefficients.}
+\item{exp}{Logical, indicating whether or not to exponentiate the the coefficients.}
 
-\item{ci}{confidence Interval (CI) level. Default to 0.95 (95\%).
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).
 e.g. \code{\link[survival:coxph]{survival::coxph()}}.}
 
-\item{parallel}{if \code{TRUE}, use N-1 cores to run the task.}
+\item{parallel}{If \code{TRUE}, use N-1 cores to run the task.}
 
-\item{...}{other parameters passing to corresponding regression model function.}
+\item{...}{Other parameters passing to corresponding regression model function.}
 }
 \value{
-a \code{REGObject} R6 object.
+A \code{REGObject} R6 object.
 }
 \description{
-Run Regression Model Building
+Run regression model building
 }
 \examples{
 x <- prepare(

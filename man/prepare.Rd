@@ -2,21 +2,21 @@
 % Please edit documentation in R/01-prepare.R
 \name{prepare}
 \alias{prepare}
-\title{Prepare Data to Create a \code{REGObject}}
+\title{Prepare data to create a \code{REGObject}}
 \usage{
 prepare(data, vars_y, vars_x, vars_c)
 }
 \arguments{
 \item{data}{A \code{data.table} storing input data.}
 
-\item{vars_y}{Predicted variables or formulas.}
+\item{vars_y}{Column names storing the \strong{predicted variables}.}
 
-\item{vars_x}{Focal variables.}
+\item{vars_x}{Column names storing the \strong{focal variables}.}
 
-\item{vars_c}{Covariables.}
+\item{vars_c}{Column names storing the \strong{Covariables}.}
 }
 \description{
-Prepare Data to Create a \code{REGObject}
+It is recommended that the input \code{data} has been cleaned for modeling purposes. While setting "factor(cyl)" is acceptable in the \verb{vars_*} options, ensuring data cleanliness will improve the overall readability.
 }
 \examples{
 x <- prepare(
