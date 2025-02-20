@@ -2,7 +2,7 @@
 
 # File R/REGModelList.R: @testexamples
 
-test_that("Function REGModelList() @ L52", {
+test_that("Function REGModelList() @ L56", {
   
   # GLM regression
   ml <- REGModelList$new(
@@ -32,6 +32,7 @@ test_that("Function REGModelList() @ L52", {
   )
   ml2$build()
   ml2$plot_forest()
+  ml2$plot_connected_risk()
   
   # Group Cox analysis
   lung$ph.ecog <- factor(lung$ph.ecog)
@@ -42,7 +43,10 @@ test_that("Function REGModelList() @ L52", {
     covars = "age", group = "sex"
   )
   ml3$build()
+  ml3$plot_forest()
   
   expect_s3_class(ml, "REGModelList")
+  expect_s3_class(ml2, "REGModelList")
+  expect_s3_class(ml3, "REGModelList")
 })
 

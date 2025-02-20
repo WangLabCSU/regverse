@@ -36,6 +36,7 @@
 #' )
 #' ml2$build()
 #' ml2$plot_forest()
+#' ml2$plot_connected_risk()
 #'
 #' # Group Cox analysis
 #' lung$ph.ecog <- factor(lung$ph.ecog)
@@ -46,9 +47,12 @@
 #'   covars = "age", group = "sex"
 #' )
 #' ml3$build()
+#' ml3$plot_forest()
 #'
 #' @testexamples
 #' expect_s3_class(ml, "REGModelList")
+#' expect_s3_class(ml2, "REGModelList")
+#' expect_s3_class(ml3, "REGModelList")
 REGModelList <- R6::R6Class(
   "REGModelList",
   inherit = NULL,
@@ -307,15 +311,15 @@ REGModelList <- R6::R6Class(
       # 3. Visualization
       p <- polar_init(data_reg,
         x = focal_term,
-        aes(color = role, size = `-log10(p)`)
+        ggplot2::aes(color = role, size = `-log10(p)`)
       ) + ggplot2::scale_color_manual(values = c("grey", "blue", "red")) +
         labs(size = "-log10(p)", color = "risk type") +
         ggnewscale::new_scale("color") +
         ggnewscale::new_scale("size") +
         polar_connect(data_cor, x1 = var1, x2 = var2, size = size, color = way, alpha = 0.5) +
         ggplot2::scale_color_manual(values = c("cyan", "orange")) +
-        labs(color = "correlation type", size = "correlation size") +
-        theme(
+        ggplot2::labs(color = "correlation type", size = "correlation size") +
+        ggplot2::theme(
           legend.position = "bottom",
           legend.direction = "vertical",
           legend.box = "horizontal"

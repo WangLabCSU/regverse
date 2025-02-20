@@ -38,6 +38,7 @@ ml2 <- REGModelList$new(
 )
 ml2$build()
 ml2$plot_forest()
+ml2$plot_connected_risk()
 
 # Group Cox analysis
 lung$ph.ecog <- factor(lung$ph.ecog)
@@ -48,6 +49,7 @@ ml3 <- REGModelList$new(
   covars = "age", group = "sex"
 )
 ml3$build()
+ml3$plot_forest()
 
 }
 \section{Public fields}{
