@@ -56,8 +56,11 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of regverse like so:</p>
+<p>Install from r-universe:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"regverse"</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://wanglabcsu.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Install from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"WangLabCSU/regverse"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -65,14 +68,14 @@
 </h2>
 <p>This is a basic example which shows you how to build and visualize a Cox model.</p>
 <p>Prepare data:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/WangLabCSU/regverse" class="external-link">regverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lung</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/lung.html" class="external-link">lung</a></span></span>
 <span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">lung</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span></span></code></pre></div>
 <p>Create a model:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  <span class="va">lung</span>,</span>
 <span>  recipe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -93,7 +96,7 @@
 <span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span>
 <span><span class="co">#&gt; [coxph] model ==========</span></span></code></pre></div>
 <p>You can also create it with formula:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/REGModel.html">REGModel</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  <span class="va">lung</span>,</span>
 <span>  recipe <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">sex</span></span>
@@ -111,11 +114,11 @@
 <span><span class="co">#&gt;   using a Wald z-distribution approximation.</span></span>
 <span><span class="co">#&gt; [coxph] model ==========</span></span></code></pre></div>
 <p>Take a look at the model result (package <code>see</code> is required):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="fu">plot</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
 <p>Visualize with more nice forest plot.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span><span class="op">$</span><span class="fu">get_forest_data</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">model</span><span class="op">$</span><span class="fu">plot_forest</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
@@ -124,7 +127,7 @@
 <h2 id="batch-processing-models">Batch processing models<a class="anchor" aria-label="anchor" href="#batch-processing-models"></a>
 </h2>
 <p>For building a list of regression model, unlike above, a lazy building approach is used, i.e., <code>$build()</code> must manually typed after creating <code>REGModelList</code> object. (This also means you can check or modify the setting before building if necessary)</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ml</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/REGModelList.html">REGModelList</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">mtcars</span>,</span>
 <span>  y <span class="op">=</span> <span class="st">"mpg"</span>,</span>
@@ -181,7 +184,7 @@
 <div class="section level2">
 <h2 id="coverage">Coverage<a class="anchor" aria-label="anchor" href="#coverage"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">covr</span><span class="fu">::</span><span class="fu">package_coverage</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; regverse Coverage: 76.13%</span></span>
 <span><span class="co">#&gt; R/geom_segment_straight.R: 35.90%</span></span>
@@ -230,6 +233,8 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://wanglabcsu.r-universe.dev/" class="external-link"><img src="https://wanglabcsu.r-universe.dev/badges/:name" alt="name status badge"></a></li>
+<li><a href="https://wanglabcsu.r-universe.dev/regverse" class="external-link"><img src="https://wanglabcsu.r-universe.dev/regverse/badges/version" alt="regverse status badge"></a></li>
 <li><a href="https://github.com/WangLabCSU/regverse/actions/workflows/R-check.yaml" class="external-link"><img src="https://github.com/WangLabCSU/regverse/actions/workflows/R-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://hits.seeyoufarm.com" class="external-link"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FShixiangWang%2Fregverse&amp;count_bg=%2379C83D&amp;title_bg=%23555555&amp;icon=&amp;icon_color=%23E7E7E7&amp;title=hits&amp;edge_flat=false" alt="Hits"></a></li>
 </ul>
