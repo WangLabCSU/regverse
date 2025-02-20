@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # regverse
 
 <!-- badges: start -->
+[![name status badge](https://wanglabcsu.r-universe.dev/badges/:name)](https://wanglabcsu.r-universe.dev/)
+[![regverse status badge](https://wanglabcsu.r-universe.dev/regverse/badges/version)](https://wanglabcsu.r-universe.dev/regverse)
 [![R-CMD-check](https://github.com/WangLabCSU/regverse/actions/workflows/R-check.yaml/badge.svg)](https://github.com/WangLabCSU/regverse/actions/workflows/R-check.yaml)
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FShixiangWang%2Fregverse&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 
@@ -26,7 +28,13 @@ analyze, summarize, and visualize regression models (CoxPH and GLMs).
 
 ## Installation
 
-You can install the development version of regverse like so:
+Install from r-universe:
+
+```r
+install.packages("regverse", repos = c("https://wanglabcsu.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+Install from GitHub:
 
 ```r
 remotes::install_github("WangLabCSU/regverse")
