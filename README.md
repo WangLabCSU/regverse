@@ -3,6 +3,8 @@
 
 # regverse
 
+## Superseded Note: This package has been refactoring as [bregr](https://github.com/WangLabCSU/bregr)
+
 <!-- badges: start -->
 
 [![name status
